@@ -7,7 +7,7 @@ import google.generativeai as genai
 # Configuração da página e visual
 st.set_page_config(page_title="Leitor do arXiv", page_icon="📄", layout="centered")
 
-# Puxa a chave da API dos "Secrets" do Streamlit (vamos configurar no Passo 3)
+# Puxa a chave da API dos "Secrets" do Streamlit
 API_KEY = st.secrets.get("GEMINI_API_KEY")
 
 if API_KEY:
@@ -37,11 +37,11 @@ if st.button("Buscar Artigos"):
     if not API_KEY:
         st.stop()
         
-    # O st.spinner mantém o usuário avisado enquanto o processo roda sem limite de tempo
-    with st.spinner("Buscando artigos no arXiv e traduzindo... Isso pode levar uns segundos, mas aqui não cai! 🚀"):
+    # O spinner atualizado avisa que estamos buscando 20 artigos
+    with st.spinner(f"Buscando os 20 artigos mais recentes de {selected_cat_code} e traduzindo... Pode levar uns segundos! 🚀"):
         
-        # 1. Busca os dados no arXiv (Voltamos para 5 resultados já que não há limite de tempo)
-        url = f"https://export.arxiv.org/api/query?search_query=cat:{selected_cat_code}&sortBy=submittedDate&sortOrder=descending&max_results=5"
+        # 1. Busca os dados no arXiv com max_results=20
+        url = f"https://export.arxiv.org/api/query?search_query=cat:{selected_cat_code}&sortBy=submittedDate&sortOrder=descending&max_results=20"
         response = requests.get(url)
         
         if response.status_code != 200:
@@ -101,7 +101,7 @@ if st.button("Buscar Artigos"):
             translated_data = json.loads(res.text)
             trans_dict = {item['id']: item for item in translated_data}
             
-            st.success(f"Exibindo {len(entries)} artigos mais recentes!")
+            st.success(f"Pronto! Exibindo os {len(entries)} artigos mais recentes.")
             st.divider()
             
             # 3. Renderiza os resultados na tela
