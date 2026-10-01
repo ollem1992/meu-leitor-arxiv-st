@@ -78,7 +78,7 @@ if st.button("Buscar Artigos"):
         Conteúdo: {json.dumps([{"id": e["id"], "title": e["title"], "summary": e["summary"]} for e in entries])}"""
         
         try:
-            model = genai.GenerativeModel('gemini-2.5-flash')
+            model = genai.GenerativeModel('gemini-3.8-flash')
             res = model.generate_content(
                 prompt,
                 generation_config=genai.GenerationConfig(
